@@ -1,5 +1,6 @@
 # Beego
-Back End Easability Go Lang
+Back End Web dengan Bahasa Golang
+
 # Tema Aplikasi
 
 # Latar Belakang

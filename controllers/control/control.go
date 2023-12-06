@@ -4,9 +4,17 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"runtime"
 )
 
-func RenderTemplate(w http.ResponseWriter, basePath, tmpl string) {
+var basePath string
+
+func init() {
+	_, b, _, _ := runtime.Caller(0)
+	basePath = filepath.Join(filepath.Dir(b), "..", "..")
+}
+
+func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	templatePath := filepath.Join(basePath, "views", tmpl)
 	temp, err := template.ParseFiles(templatePath)
 	if err != nil {
@@ -20,8 +28,12 @@ func RenderTemplate(w http.ResponseWriter, basePath, tmpl string) {
 	}
 }
 
-func Router(basePath, tmpl string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		RenderTemplate(w, basePath, tmpl)
-	}
+func Router(pathWeb, tmpl, method string) {
+	http.HandleFunc(pathWeb, func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == method {
+			RenderTemplate(w, tmpl)
+		} else {
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		}
+	})
 }

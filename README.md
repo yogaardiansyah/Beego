@@ -1,4 +1,4 @@
-# Beego
+# Bego
 Back End Web dengan Bahasa Golang
 
 # Tema Aplikasi
